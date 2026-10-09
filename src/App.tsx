@@ -337,16 +337,59 @@ function CourseSummaryCard({ course }: { course: Course }) {
         <ul className="divide-y divide-border">
           {course.slots.map((s) => {
             const sel = coursePicks[s.id] ?? []
-            const names = s.options.filter((o) => sel.includes(o.id)).map((o) => o.name)
+            const selected = s.options.filter((o) => sel.includes(o.id))
             return (
-              <li key={s.id} className="flex gap-3 py-2 text-[13.5px]">
-                <span className="w-12 shrink-0 font-extrabold text-primary tabular-nums">
-                  {s.time}
-                </span>
-                <span>
-                  <b className="font-bold">{s.title}</b> —{' '}
-                  {names.length ? names.join(' + ') : '미정'}
-                </span>
+              <li key={s.id} className="py-3">
+                <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-[13.5px]">
+                  <span className="font-extrabold text-primary tabular-nums">{s.time}</span>
+                  <b className="font-bold">{s.title}</b>
+                  {selected.length === 0 && <span className="text-muted-foreground">미정</span>}
+                </div>
+                {selected.map((o) => {
+                  const photos = o.photos.map((k) => PHOTOS[k])
+                  const mapUrl = MAP_LINKS[o.id]
+                  return (
+                    <div key={o.id} className="mt-2 rounded-xl border border-border bg-card p-2.5">
+                      <div className="flex items-start gap-2">
+                        <span className="min-w-0 flex-1">
+                          <span className="flex flex-wrap items-center gap-1.5 text-sm font-bold">
+                            {o.name}
+                            {o.tags?.map((t) => (
+                              <Badge
+                                key={t}
+                                variant="outline"
+                                className="h-5 border-amber-200 bg-amber-50 px-1.5 text-[11px] font-semibold text-amber-800"
+                              >
+                                {t}
+                              </Badge>
+                            ))}
+                          </span>
+                          <span className="mt-0.5 block text-[12.5px] leading-relaxed text-muted-foreground">
+                            {o.detail}
+                          </span>
+                        </span>
+                        {mapUrl && (
+                          <a
+                            href={mapUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="네이버 지도로 보기"
+                            className="inline-flex shrink-0 items-center gap-0.5 rounded-full border border-border bg-card px-2 py-1 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                          >
+                            <MapPin className="size-3" />
+                            지도
+                          </a>
+                        )}
+                      </div>
+                      {photos.length > 0 && <PhotoCarousel photos={photos} />}
+                      {o.desc && (
+                        <div className="mt-2 text-[13px] leading-relaxed text-foreground/85">
+                          {o.desc}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </li>
             )
           })}
