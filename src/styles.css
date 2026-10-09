@@ -1,0 +1,75 @@
+/* react-chrono's global stylesheet targets body last; re-assert the app theme. */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* react-chrono integration overrides.
+   The library renders into a fixed-height inner scroll container by default;
+   these rules let the vertical timeline grow with the page and match the
+   shadcn palette. */
+
+.chrono-wrap [class*='timeline-wrapper'],
+.chrono-wrap [class*='timeline-main-wrapper'] {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* chrono draws each connector line as pseudo-elements that extend above the
+   first card; clip the overhang so the axis never pokes into the course
+   header card above. */
+.chrono-wrap {
+  overflow: hidden;
+}
+
+/* chrono's inner content wrapper keeps flex-shrink:0 and sizes to max-content,
+   which long descriptions + carousel slides can exceed (content overflows and
+   gets clipped by .card-description). Pin it to the card width. */
+.chrono-wrap .card-description > div {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.chrono-wrap .timeline-card-content,
+.chrono-wrap .rc-card {
+  border-color: var(--border) !important;
+}
+
+.chrono-wrap .timeline-card-content:not(.active) {
+  box-shadow: 0 4px 12px -10px rgb(120 60 40 / 0.35) !important;
+}
+
+.chrono-wrap .timeline-card-content.active {
+  border-color: #e6c9bd !important;
+  transform: none !important;
+  box-shadow:
+    0 0 0 2px rgb(178 58 46 / 0.14),
+    0 4px 12px -8px rgb(120 60 40 / 0.3) !important;
+}
+
+/* The timeline point lost its ring color to Tailwind's base layer
+   (border colors now resolve to --border), so re-assert it. */
+.chrono-wrap .timeline-vertical-circle > div {
+  border: 3px solid var(--primary) !important;
+  background-color: var(--card) !important;
+}
+
+/* chrono renders the item time as a bare <h3> at the top of each card with
+   hard-coded inline styles (1.5rem dark text). Turn it back into the compact
+   red time pill the design uses — !important needed to beat inline styles. */
+.chrono-wrap .timeline-card-content h3 {
+  display: inline-block !important;
+  align-self: flex-start !important;
+  height: auto !important;
+  margin: 0 0 4px !important;
+  padding: 2px 12px 3px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  color: #ffffff !important;
+  background-color: var(--primary) !important;
+  border-radius: 999px !important;
+}
