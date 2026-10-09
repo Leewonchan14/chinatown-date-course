@@ -73,3 +73,23 @@ body {
   background-color: var(--primary) !important;
   border-radius: 999px !important;
 }
+
+/* On narrow screens chrono centers each row and pins the card wrapper to
+   width:75% (inline), leaving ~25% of the viewport as dead space on a phone.
+   Let the card take every pixel left of the timeline axis instead. */
+@media (max-width: 768px) {
+  .chrono-wrap ul li {
+    justify-content: flex-start !important;
+  }
+
+  .chrono-wrap .card-content-wrapper {
+    width: auto !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .chrono-wrap .timeline-card-content {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
